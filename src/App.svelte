@@ -2,7 +2,6 @@
 
 	import { onMount } from "svelte";
 	import Footer from "./components/Footer.svelte";
-	import Navbar from "./components/Navbar.svelte";
 	import CreateModal from "./components/modals/AddModal.svelte";
 	import AddProductForm from "./components/forms/AddProductForm.svelte";
 	import EditModal from "./components/modals/EditModal.svelte";
@@ -53,7 +52,7 @@
 	const addProduct = (e) => {
 		let data = e.detail;
 		fetch("https://localhost:44364/api/products/", {
-			method: "POST", // or 'PUT'
+			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -72,7 +71,7 @@
 		let data = e.detail;
 		console.log(data);
 		fetch("https://localhost:44364/api/products/" + data.id, {
-			method: "PUT", // or 'PUT'
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -89,7 +88,7 @@
 
 	const handleDelete = (id) => {		
 		fetch("https://localhost:44364/api/products/" + id, {
-			method: "DELETE", // or 'PUT'
+			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -117,7 +116,6 @@
 		<AddProductForm on:click={switchCreateModal} on:addProduct={addProduct} />
 	</slot>
 </CreateModal>
-<Navbar />
 <main>
 	<section class="hero is-info is-small mb-4">
 		<div class="hero-body">
@@ -132,45 +130,48 @@
 			
 		</div>
 	</div>
-	<table class="table is-bordered is-striped is-fullwidth is-hoverable">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>In Stock</th>
-				<th>Info</th>
-				<th>Edit</th>
-				<th>Delete</th>
-			</tr>
-		</thead>
-		{#each products as product (product.id)} 
-			<tbody>
+	<div class="table-container mx-4">
+		<table class="table is-bordered is-striped is-fullwidth is-hoverable ">
+			<thead>
 				<tr>
-					<th>{product.id}</th>
-					<!-- svelte-ignore a11y-missing-attribute -->
-					<th>
-						<a on:click={() => {handleDetailsModal(product)}}>{product.name}</a>
-					</th>
-					{#if product.inStock == true }
-						<th class = "has-text-success is-2">Available</th>
-					{:else}
-						<th class = "has-text-danger is-2">Unavailable</th>
-					{/if}
-					<th>
-						<button on:click={() => {handleDetailsModal(product)}} class="button is-info mx-2">Details</button>						
-					</th>
-					<th>
-						<button on:click={() => {handleEditModal(product)}} class="button is-warning mx-2">Edit</button>						
-					</th>
-					<th>
-						<button on:click={() => {handleDelete(product.id)}} class="button is-danger mx-2">Delete</button>
-					</th>
+					<th>ID</th>
+					<th>Name</th>
+					<th>In Stock</th>
+					<th>Info</th>
+					<th>Edit</th>
+					<th>Delete</th>
 				</tr>
-			</tbody>					
-		{:else}
-			<em>Loading...</em>
-		{/each}
-	</table>
+			</thead>
+			{#each products as product (product.id)} 
+				<tbody>
+					<tr>
+						<th>{product.id}</th>
+						<!-- svelte-ignore a11y-missing-attribute -->
+						<th>
+							<a on:click={() => {handleDetailsModal(product)}}>{product.name}</a>
+						</th>
+						{#if product.inStock == true }
+							<th class = "has-text-success is-2">Available</th>
+						{:else}
+							<th class = "has-text-danger is-2">Unavailable</th>
+						{/if}
+						<th>
+							<button on:click={() => {handleDetailsModal(product)}} class="button is-info mx-2">Details</button>						
+						</th>
+						<th>
+							<button on:click={() => {handleEditModal(product)}} class="button is-warning mx-2">Edit</button>						
+						</th>
+						<th>
+							<button on:click={() => {handleDelete(product.id)}} class="button is-danger mx-2">Delete</button>
+						</th>
+					</tr>
+				</tbody>					
+			{:else}
+				<em>Loading...</em>
+			{/each}
+		</table>
+	</div>
+	
 	
 	
 </main>
@@ -179,7 +180,6 @@
 <style>
 	main {
 		text-align: center;
-		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
 		display: flex;
@@ -187,7 +187,8 @@
 		flex-direction: column;
 	}
 
-	@media (min-width: 640px) {
+
+	@media (min-width: 340px) {
 		main {
 			max-width: none;
 		}
